@@ -1,0 +1,59 @@
+---
+- name: Description of the playbook
+  hosts: all  # Target hosts or groups
+  tasks:
+    - name: Task 1
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+      register: task1_output  # Register task output for use in subsequent tasks
+
+    - name: Task 2
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+      when: condition  # Conditional execution based on a condition
+
+    - name: Task 3
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+      notify: handler_name  # Notify a handler when task changes occur
+
+    - name: Task 4
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+      ignore_errors: yes  # Continue playbook execution even if this task fails
+
+    - name: Task 5
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+      changed_when: false  # Treat this task as not changed regardless of its execution result
+
+  handlers:
+    - name: Handler 1
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+
+    - name: Handler 2
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+
+  pre_tasks:
+    - name: Pre-task 1
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+
+  post_tasks:
+    - name: Post-task 1
+      ansible.builtin.module_name:
+        option1: value
+        option2: value
+
+  roles:
+    - role_name  # Include roles in the playbook

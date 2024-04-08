@@ -1,0 +1,10 @@
+hostname: "node1"
+ip_address: "172.16.79.145"
+dir: "/Users/arslankhan/Codes/ansible/ansible-local"
+interface: "ens160"
+
+packages_to_install:
+  - wget
+  - git
+
+welcome_message: "This is the day you will always remember as the day you almost caught Captain Jack Sparrow"

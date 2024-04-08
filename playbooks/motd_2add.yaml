@@ -1,0 +1,13 @@
+---
+# ansible-playbook -l node1 playbooks/motd_2add.yaml
+- name: Add lines to message of the day (motd)
+  hosts: all
+  become: true
+  vars_files:
+    - ../variables.yaml
+  tasks:
+    - name: Set up welcome message
+      ansible.builtin.lineinfile:
+        path: /etc/motd
+        line: "Added line: \n{{ welcome_message }}"
+        state: present

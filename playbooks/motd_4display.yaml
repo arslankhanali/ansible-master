@@ -1,0 +1,15 @@
+---
+# ansible-playbook -l node1 playbooks/motd_4display.yaml
+- name: Display message of the day (motd)
+  hosts: all
+  become: true
+  tasks:
+    - name: Run cat /etc/motd
+      ansible.builtin.command:
+        cmd: cat /etc/motd
+      register: playbook_result
+      changed_when: playbook_result.rc != 0 # <- Uses the return code to define when the task has changed.
+
+    - name: Display 'cat /etc/motd' result
+      ansible.builtin.debug:
+        var: playbook_result.stdout_lines

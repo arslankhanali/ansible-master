@@ -1,0 +1,30 @@
+---
+# ansible-playbook -l localhost playbooks/mac.yaml --connection=local
+- name: Configure IP address and hostname
+  hosts: all
+  # connection: local # or --connection=local
+  # become: true # or --become --ask-become-pass
+  tasks:
+    - name: Get date
+      ansible.builtin.command:
+        cmd: "date"
+      register: date_output
+      changed_when: date_output.rc != 0
+    - name: Get hostname
+      ansible.builtin.command:
+        cmd: "hostname"
+      register: hostname_output
+      changed_when: hostname_output.rc != 0
+    - name: Get whoami
+      ansible.builtin.command:
+        cmd: "whoami"
+      register: whoami_output
+      changed_when: whoami_output.rc != 0
+    - name: Display Hostname
+      ansible.builtin.debug:
+        msg: |
+          - "hostname: {{ hostname_output.stdout_lines }}"
+          - "date: {{ date_output.stdout_lines }}"
+    - name: Whoami
+      ansible.builtin.debug:
+        msg: "whoami: {{ whoami_output.stdout_lines }}"

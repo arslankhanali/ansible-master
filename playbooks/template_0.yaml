@@ -1,0 +1,26 @@
+---
+- name: Copy files
+  hosts: all
+  vars_files:
+    - ../variables.yaml
+  connection: local # Either use this or --connection=local
+  gather_facts: true
+  become: true # or --become --ask-become-pass
+  vars:
+    ssh_key_path: "/Users/arslankhan/.ssh/id_rsa"
+  tasks:
+    - name: Copy hosts file to remote hosts
+      ansible.builtin.copy:
+        src: "{{ dir }}/hosts"
+        dest: /etc/hosts
+        mode: "0644"
+        backup: true
+        force: true
+      become: true
+      # include tasks
+    - name: Register system and attach Employee SKY
+      ansible.builtin.include_tasks: tasks_subscription.yaml
+    
+# Include playbook
+- name: Copying hosts file and ssh keys
+  ansible.builtin.import_playbook: playbook_copyfiles.yaml

@@ -1,0 +1,14 @@
+---
+- name: Playbook for a single VMs
+  hosts: all
+  become: true
+  tasks:
+    - name: Enable cockpit.socket service
+      ansible.builtin.service:
+        name: cockpit.socket
+        enabled: true
+
+    - name: Start cockpit.socket service
+      ansible.builtin.service:
+        name: cockpit.socket
+        state: started

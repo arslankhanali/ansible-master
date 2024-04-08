@@ -1,0 +1,28 @@
+[nodes]
+node3 ansible_host=172.16.79.147
+node2 ansible_host=172.16.79.146
+node1 ansible_host=172.16.79.145
+
+[localhost]
+mac ansible_host=127.0.0.1
+
+[all:vars]
+ansible_user=rc
+ansible_ssh_private_key_file=/Users/arslankhan/.ssh/id_rsa
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[g1]
+node1
+
+[g12]
+node1
+node2
+
+[g13]
+node1
+node3
+
+[g123]
+node1
+node2
+node3

@@ -1,0 +1,13 @@
+---
+- name: Playbook for a single VMs
+  hosts: all
+  become: true
+  vars_files:
+    - 0_variables.yaml
+  tasks:
+    - name: Change hostname
+      ansible.builtin.include_tasks: tasks_hostname.yaml
+- name: Color Prompt
+  import_playbook: playbook_colorprompt.yaml
+- name: Start and Enable Cockpit
+  import_playbook: playbook_cockpit.yaml

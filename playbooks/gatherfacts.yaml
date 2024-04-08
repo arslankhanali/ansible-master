@@ -1,0 +1,15 @@
+---
+- name: Gather system information and save to file
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Save facts to JSON file
+      ansible.builtin.copy:
+        content: "{{ ansible_facts | to_nice_json }}"
+        dest: "../{{ inventory_hostname }}_facts.json"
+        mode: '0644'
+      delegate_to: localhost
+
+    - name: Display RHEL version
+      ansible.builtin.debug:
+        msg: "RHEL version is {{ ansible_distribution }} {{ ansible_distribution_version }}"

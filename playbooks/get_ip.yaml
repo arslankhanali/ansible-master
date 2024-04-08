@@ -1,0 +1,9 @@
+---
+- name: Get current network configuration for interface ens160
+  hosts: all
+  become: true
+  tasks:
+    - name: Display network configuration for interface ens160
+      ansible.builtin.debug:
+        msg: "Interface ens160 configuration - Address: {{ ansible_ens160 }}"
+      when: ansible_ens160 is defined

@@ -1,0 +1,49 @@
+---
+# ansible-playbook -l node1 playbooks/apache.yaml # curl node1
+# ansible-playbook -l node1 playbooks/apache_reverse.yaml
+- name: Install Apache server and display hostname
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Apache web server
+      ansible.builtin.dnf:
+        name: httpd  # For Rhel systems
+        state: present
+
+    - name: Create index.html file with hostname
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+      notify: Restart Apache
+
+    - name: Add firewall rule for HTTP service
+      ansible.posix.firewalld:
+        service: http
+        state: enabled
+        permanent: true
+        immediate: true
+
+    - name: Reload firewall
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
+
+  handlers:
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+
+
+- name: Curl webpage
+  hosts: localhost
+  tasks:
+    - name: Curl webpage
+      ansible.builtin.uri:
+        url: "http://{{ ansible_hostname }}"
+        return_content: true
+      register: webpage_output
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ webpage_output.content }}"

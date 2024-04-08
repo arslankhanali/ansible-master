@@ -1,0 +1,28 @@
+---
+- name: Sample Ansible Playbook with Include and Import
+  hosts: all
+  gather_facts: true
+  vars:
+    my_var: "Hello, world!"
+  tasks:
+    # This means that the tasks in playbook.yml will be executed in the same context as the tasks in the current playbook. 
+    # Changes made in playbook.yml will affect the current playbook's execution.
+    # variables will be shared between them.
+    - name: Include another playbook using include_playbook
+      include_playbook: playbook.yml
+    # This means that the tasks in playbook.yml will be executed in a separate context from the current playbook. 
+    # Changes made in playbook.yml will not affect the current playbook's execution, and 
+    # variables will not be shared between them.
+    - name: Include another playbook using import_playbook
+      import_playbook: playbook.yml
+      
+# Include playbook
+- name: Copying hosts file and ssh keys
+  ansible.builtin.import_playbook: playbook_copyfiles.yaml
+
+
+
+
+
+
+

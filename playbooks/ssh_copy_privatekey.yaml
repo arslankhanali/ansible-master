@@ -1,0 +1,13 @@
+---
+- name: Copy files
+  hosts: all
+  vars:
+    ssh_key_path: "/Users/arslankhan/.ssh/id_rsa"
+  tasks:
+    - name: Copy private key to all hosts
+    # Want to copy private key (./keys/id_rsa) to all hosts so they can ssh into each other as well.
+      ansible.builtin.copy:
+        src: "{{ ssh_key_path }}"
+        dest: ~/.ssh
+        backup: true
+        mode: "0700"

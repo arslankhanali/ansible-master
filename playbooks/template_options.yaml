@@ -1,0 +1,39 @@
+---
+- name: Sample Ansible Playbook
+  hosts: all
+  gather_facts: true
+  vars:
+    my_var: "Hello, world!"
+  vars_files:
+    - ../vars/variables.yaml
+  vars_prompt:
+    - name: "user_input"
+      prompt: "Please enter a value for user_input"
+      private: no
+  remote_user: ansible_user
+  connection: ssh # local
+  become: true
+  become_user: root
+  become_method: sudo  
+  ignore_errors: yes
+  verbosity: 2
+  force_handlers: no
+  flush_handlers: yes
+  tags:
+    - tag1
+    - tag2
+  when: ansible_os_family == "RedHat"
+  pre_tasks:
+    - name: "Perform pre-task"
+      debug:
+        msg: "This is a pre-task"
+  roles:
+    - role: my_role
+  tasks:
+    - name: "Sample Task"
+      debug:
+        msg: "{{ my_var }}"
+  post_tasks:
+    - name: "Perform post-task"
+      debug:
+        msg: "This is a post-task"

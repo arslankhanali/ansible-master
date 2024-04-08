@@ -1,0 +1,39 @@
+- name: Remove Apache server and revert firewall changes
+  hosts: all
+  become: true
+  tasks:
+    - name: Stop and disable Apache service
+      ansible.builtin.service:
+        name: httpd
+        state: stopped
+        enabled: false
+      ignore_errors: "{{ ansible_check_mode }}"
+
+    - name: Remove Apache web server
+      ansible.builtin.dnf:
+        name: httpd  # For Rhel systems
+        state: absent
+
+    - name: Remove index.html file
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Remove firewall rule for HTTP service
+      ansible.posix.firewalld:
+        service: http
+        state: disabled
+        permanent: true
+        immediate: true
+
+    - name: Reload firewall
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
+
+  handlers:
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+        enabled: false

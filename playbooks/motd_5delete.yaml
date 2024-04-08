@@ -1,0 +1,11 @@
+---
+# ansible-playbook -l node1 playbooks/motd_5delete.yaml
+- name: Delete message of the day (motd)
+  hosts: all
+  become: true
+  tasks:
+    - name: Clear content from /etc/motd
+      ansible.builtin.copy:
+        content: ""
+        dest: /etc/motd
+        mode: "0644"
