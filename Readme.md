@@ -2,14 +2,16 @@
 ``` sh
 # On RHEL
 dnf install -y ansible-core
+
 # On mac 
 brew install ansible
 ```
 
-# SSH setup for host
+# SSH setup for remote host
 ```sh
 # If you dont already have a ssh key pair
 ssh-keygen -t rsa -b 4096
+
 # Copy your public key to host
 ssh-copy-id -o StrictHostKeyChecking=no -i /Users/arslankhan/.ssh/id_rsa rc@<ip_address>
 # or
@@ -40,7 +42,9 @@ ansible-playbook playbooks/index.html.j2 --syntax-check # Should give error
 # See what hosts will be targetted. --list-hosts
 ansible-playbook -l g123 playbooks/helloworld.yaml --list-hosts
 
-# Run helloworld playbook. Select subset of hosts with -l. Select inventory file with -i
+# Run helloworld playbook.
+# Select inventory file with -i 
+# Select subset of hosts with -l. 
 ansible-playbook -i inventory -l all playbooks/helloworld.yaml
 ansible-playbook -l all   playbooks/helloworld.yaml # Run on all
 ansible-playbook -l g1    playbooks/helloworld.yaml # Run on a group of node
@@ -49,11 +53,11 @@ ansible-playbook -l node1 playbooks/helloworld.yaml # Run on a single node
 # Specify ansible user. -u
 ansible-playbook -l node1 playbooks/gatherFacts.yaml -u rc
 
-# Playbook to gather facts
-ansible-playbook -l node1 playbooks/gatherFacts.yaml 
-
 # --step , step through each task 1 by 1
 ansible-playbook -l node1 playbooks/helloworld.yaml --step
+
+# Playbook to gather facts
+ansible-playbook -l node1 playbooks/gatherFacts.yaml 
 ```
 
 # Variables
@@ -71,6 +75,7 @@ ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml -e we
 # Mac
 ``` sh
 # --connection=local so it does not try to ssh into the mac
+ansible-playbook -l localhost playbooks/helloworld.yaml -c local
 ansible-playbook -l localhost playbooks/mac.yaml --connection=local
 
 # To run as root
@@ -79,8 +84,12 @@ ansible-playbook -l localhost playbooks/mac.yaml --connection=local --ask-become
 
 # Inventory
 ``` sh
-# Verify that inventory file is corrrect 
+# list 
 ansible-inventory --inventory inventory --list
+ansible-inventory --graph
+
+# Get info on host
+ansible-inventory --host node1
 ```
 
 # Remote Host
@@ -110,8 +119,10 @@ ansible-playbook -l ceph playbooks/motd_1set.yaml
 
 # ansible.cfg
 ``` sh
-ansible.cfg preference order
+# View current config
+ansible-config view
 
+#ansible.cfg preference order
 1. ANSIBLE_CONFIG (environment variable if set)  
 2. ansible.cfg (in the current directory)  -> `our method`
 3. ~/.ansible.cfg (in the home directory)  

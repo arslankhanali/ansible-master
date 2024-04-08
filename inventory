@@ -26,3 +26,6 @@ node3
 node1
 node2
 node3
+
+[remote]
+ceph ansible_host=ssh.ocpvdev01.dal10.infra.demo.redhat.com ansible_port=30087 ansible_user=lab-user ansible_password=@password_ceph.yml
