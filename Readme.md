@@ -69,6 +69,9 @@ In Ansible, when dealing with variable precedence, the order of precedence from 
 5. **Variables defined in the `ansible.cfg` file**: These are global variables set in the `ansible.cfg` configuration file.
 6. **Environment variables**: Variables set in the environment where Ansible is executed. These take precedence over variables set in configuration files.
 ``` sh
+# CHECK Which variables a host is picking up or prioritising
+ansible-inventory --host node1
+
 # We are setting 'welcome_message' variable in motd playbooks
 # -e 
 ansible-playbook -l node1 playbooks/motd_1set.yaml # `welcome_message`defined in playbook - Savy
@@ -92,9 +95,10 @@ ansible-playbook -l localhost playbooks/mac.yaml --connection=local --ask-become
 # Inventory
 ``` sh
 # list 
-ansible-inventory --inventory inventory --list
-ansible-inventory --graph
-ansible-inventory --graph --vars
+ansible-inventory --inventory inventory --list # All details in yaml format
+ansible-inventory -i inventory_remote --list
+ansible-inventory --graph                      # All hosts and groups
+ansible-inventory --graph --vars               # What variables is each host picking up
 
 # Get info on host
 ansible-inventory --host node1

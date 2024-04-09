@@ -1,7 +1,7 @@
 [nodes]
-node3 ansible_host=172.16.79.147
+node1 ansible_host=172.16.79.145 # node3 is alias name. Can be anything
 node2 ansible_host=172.16.79.146
-node1 ansible_host=172.16.79.145
+node3 ansible_host=172.16.79.147
 
 [localhost]
 mac ansible_host=127.0.0.1
@@ -9,7 +9,7 @@ mac ansible_host=127.0.0.1
 [nodes:vars]
 ansible_user=rc
 ansible_ssh_private_key_file=/Users/arslankhan/.ssh/id_rsa
-ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_ssh_common_args = -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=60s
 
 [g1]
 node1
