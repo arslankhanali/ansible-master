@@ -80,6 +80,7 @@ ansible-playbook -l node1 playbooks/motd_3replace.yaml # Will pick `welcome_mess
 ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml # Give variables from a file
 ansible-playbook -l node1 playbooks/motd_3replace.yaml -e "welcome_message='FROM CLI : Savvy!'" # Give variable value in CLI
 ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml -e "welcome_message='FROM CLI - Defined Later : Savvy!'"  # If same variable is defined at two places and given to the playbook. The one defined later is given preference. `-e welcome_message="defined_later" in this case.
+ansible-playbook -l node1 playbooks/motd_5delete.yaml
 ```
 
 # Mac
