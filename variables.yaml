@@ -7,4 +7,4 @@ packages_to_install:
   - wget
   - git
 
-welcome_message: "This is the day you will always remember as the day you almost caught Captain Jack Sparrow"
+welcome_message: "FROM ./variables.yaml : Savvy!"

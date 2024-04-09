@@ -1,0 +1,10 @@
+---
+- name: Test Connection Playbook
+  hosts: all
+  gather_facts: false
+  max_fail_percentage: 0
+  tasks:
+    - name: Run a command
+      ansible.builtin.command: "whoami"
+      register: my_output # <- Registers the command output.
+      changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.

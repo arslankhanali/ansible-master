@@ -1,6 +1,8 @@
 ---
 - name: Example Playbook
   hosts: all
+  gather_facts: true   # Disable fact gathering
+  ignore_unreachable: true
   tasks:
     - name: Print Hello World
       ansible.builtin.debug:

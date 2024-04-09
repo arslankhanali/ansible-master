@@ -4,7 +4,7 @@
   vars_files:
     - ../variables.yaml
   connection: local # Either use this or --connection=local
-  gather_facts: true
+  gather_facts: false # By default Ansible always gather Facts, which makes playbook execution very slow
   become: true # or --become --ask-become-pass
   vars:
     ssh_key_path: "/Users/arslankhan/.ssh/id_rsa"

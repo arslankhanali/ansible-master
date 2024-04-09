@@ -61,15 +61,22 @@ ansible-playbook -l node1 playbooks/gatherFacts.yaml
 ```
 
 # Variables
-Provide variables for playbooks
+In Ansible, when dealing with variable precedence, the order of precedence from highest to lowest is as follows:
+1. **Variables defined in the playbook**: These variables are defined within the playbook itself using `vars` or `vars_files` directives.
+2. **Variables defined in inventory**: Variables defined within the inventory file or in inventory group_vars or host_vars directories.
+3. **Variables defined in roles**: Variables defined within roles, either in `defaults/main.yml`, `vars/main.yml`, or using `vars_files`.
+4. **Variables defined in the playbook directory**: Variables defined in `host_vars` takes precedance over `group_vars` within the playbook directory.
+5. **Variables defined in the `ansible.cfg` file**: These are global variables set in the `ansible.cfg` configuration file.
+6. **Environment variables**: Variables set in the environment where Ansible is executed. These take precedence over variables set in configuration files.
 ``` sh
 # We are setting 'welcome_message' variable in motd playbooks
 # -e 
-ansible-playbook -l node1 playbooks/motd_1set.yaml # Needs no variable - Savy
+ansible-playbook -l node1 playbooks/motd_1set.yaml # `welcome_message`defined in playbook - Savy
 ansible-playbook -l node1 playbooks/motd_2add.yaml # Variable file defined inside playbook. File is `variables.yaml` in this repo
+ansible-playbook -l node1 playbooks/motd_3replace.yaml # Will pick `welcome_message` from `host_vars/node1.yaml` file
 ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml # Give variables from a file
-ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e welcome_message="Aho" # Give variable value in CLI
-ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml -e welcome_message="defined_later"  # If same variable is defined at two places and given to the playbook. The one defined later is given preference. `-e welcome_message="defined_later" in this case.
+ansible-playbook -l node1 playbooks/motd_3replace.yaml -e "welcome_message='FROM CLI : Savvy!'" # Give variable value in CLI
+ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml -e "welcome_message='FROM CLI - Defined Later : Savvy!'"  # If same variable is defined at two places and given to the playbook. The one defined later is given preference. `-e welcome_message="defined_later" in this case.
 ```
 
 # Mac
@@ -87,6 +94,7 @@ ansible-playbook -l localhost playbooks/mac.yaml --connection=local --ask-become
 # list 
 ansible-inventory --inventory inventory --list
 ansible-inventory --graph
+ansible-inventory --graph --vars
 
 # Get info on host
 ansible-inventory --host node1
@@ -103,17 +111,14 @@ cat <<EOF > password_any_name.yaml
 ansible_password: <your_ssh_password>
 EOF
 
-# Add to inventory file 
+# Add to inventory_remote file. You can give any name to inventory file and reference in CLI
 
-cat <<EOF >> inventory
-[remote]
+cat <<EOF >> inventory_remote
 ceph ansible_host=ssh.ocpvdev01.dal10.infra.demo.redhat.com ansible_port=30087 ansible_user=lab-user ansible_password=@password_ceph.yml
 EOF
 
 # Run playbooks on remote server. Use group name or the hostname we set
-ansible-playbook -l remote playbooks/motd_1set.yaml 
-# or
-ansible-playbook -l ceph playbooks/motd_1set.yaml 
+ansible-playbook -i inventory_remote -l ceph playbooks/motd_1set.yaml 
 
 ```
 
@@ -137,6 +142,11 @@ ansible_ssh_common_args = -o ControlMaster=auto -o ControlPersist=60s -o StrictH
 become_password = YourBecomePassword
 EOF
 ```
+
+# Notes
+1. Ansible gathers facts by default unless you explicitly disable it. 
+   1. `gather_facts: no   # Disable fact gathering`
+2. 
 # Help 
 ``` sh
 # (.venv) arslankhan ansible-master % ansible -h
