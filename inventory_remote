@@ -1,0 +1,7 @@
+# `ceph` is an alias. Can be anything you want
+# `remote` is the group name. You can add more hosts under it or change its name
+# Can define variables specific to ceph host in host_vars/ceph.yaml file.
+# Can define variables specific to remote group in group_vars/remote.yaml file.
+
+[remote]
+ceph ansible_host=ssh.ocpvdev01.dal10.infra.demo.redhat.com ansible_port=30087 ansible_user=lab-user ansible_password=@password_ceph.yml

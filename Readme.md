@@ -61,6 +61,8 @@ ansible-playbook -l node1 playbooks/gatherFacts.yaml
 ```
 
 # Variables
+When adding a new host to inventory. Its a good idea to put all its variables in `host_vars/<hostname>.yaml` file  
+
 In Ansible, when dealing with variable precedence, the order of precedence from highest to lowest is as follows:
 1. **Variables defined in the playbook**: These variables are defined within the playbook itself using `vars` or `vars_files` directives.
 2. **Variables defined in inventory**: Variables defined within the inventory file or in inventory group_vars or host_vars directories.
@@ -143,15 +145,14 @@ cat <<EOF > /etc/ansible/ansible.cfg
 inventory = ./inventory
 remote_user = rc
 private_key_file = ./keys/id_rsa
-ansible_ssh_common_args = -o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no
+ansible_ssh_common_args = -o ControlMaster=auto -o ControlPersist=60s -o 
+gather_facts = false
+StrictHostKeyChecking=no
 become_password = YourBecomePassword
 EOF
 ```
 
-# Notes
-1. Ansible gathers facts by default unless you explicitly disable it. 
-   1. `gather_facts: no   # Disable fact gathering`
-2. 
+
 # Help 
 ``` sh
 # (.venv) arslankhan ansible-master % ansible -h
@@ -184,3 +185,12 @@ Runs Ansible playbooks, executing the defined tasks on the targeted hosts.
 positional arguments:
   playbook              Playbook(s)
 ```
+
+# Notes
+1. Ansible gathers facts by default unless you explicitly disable it. 
+   1. `gather_facts: no   # Disable fact gathering`
+2. Realtime output 
+```sh 
+
+```
+3. 
