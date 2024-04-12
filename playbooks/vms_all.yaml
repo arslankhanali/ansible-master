@@ -11,4 +11,4 @@
     - name: Convert default IP from DHCP to Static IP
       ansible.builtin.include_tasks: tasks_staticnetwork.yaml
 - name: Copying hosts file and ssh keys
-  ansible.builtin.import_playbook: playbook_copyfiles.yaml
+  ansible.builtin.import_playbook: copyfiles.yaml

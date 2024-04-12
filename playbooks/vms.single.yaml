@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars_files:
-    - 0_variables.yaml
+    - ../variables.yaml
   tasks:
     - name: Change hostname
       ansible.builtin.include_tasks: tasks_hostname.yaml
