@@ -6,7 +6,7 @@
     - name: Save facts to JSON file
       ansible.builtin.copy:
         content: "{{ ansible_facts | to_nice_json }}"
-        dest: "../{{ inventory_hostname }}_facts.json"
+        dest: "../templates/{{ inventory_hostname }}_facts.json"
         mode: '0644'
       delegate_to: localhost
 

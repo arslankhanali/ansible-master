@@ -1,7 +1,7 @@
 ---
 - name: Test Connection Playbook
   hosts: all
-  gather_facts: false
+  gather_facts: true
   max_fail_percentage: 0
   tasks:
     - name: Ping hosts

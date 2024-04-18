@@ -1,1 +1,1 @@
-welcome_message: "FROM group_vars/node1.yaml : Savvy!"
+welcome_message: "FROM group_vars/g1.yaml : Savvy!"

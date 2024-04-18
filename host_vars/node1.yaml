@@ -1,1 +1,3 @@
-welcome_message: "FROM host_vars/node1.yaml : Savvy!"
+hostname: "node1"
+color: "33"
+welcome_message: "Welcome to {{ hostname }}"

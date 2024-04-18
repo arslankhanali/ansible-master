@@ -1,0 +1,12 @@
+hostname: "node1"
+
+# ip_address: "172.16.79.145"
+# interface: "ens160"
+# color: 33
+# packages_to_install:
+#   - wget
+#   - git
+
+# welcome_message: "Savvy!"
+
+# ssh_publickey_path: 

@@ -1,1 +1,3 @@
-color: "31"
+hostname: "node4"
+color: "33"
+welcome_message: "Welcome to {{ hostname }}"

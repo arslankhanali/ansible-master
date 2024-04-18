@@ -1,0 +1,29 @@
+"Hey ChatGPT, I'm in the process of refining my Ansible playbooks to ensure they follow industry best practices and minimize potential errors. Could you assist me in reviewing them for completeness, adherence to naming conventions, effective error handling, and any other potential execution issues? Here are some specific areas I'm looking to improve:
+
+Use complete module names like 'ansible.builtin.command' instead of abbreviated versions like 'command'.
+Incorporate 'register' and 'changed_when' statements for better control over task behavior.
+Set 'mode' when copying files to ensure proper permissions.
+Eliminate any unnecessary whitespace for cleaner code.
+Ensure there's a newline at the end of the playbook for consistency.
+Employ descriptive names for tasks, starting with capital letters.
+I've provided an example playbook below to illustrate these points. Additionally, you can find more detailed best practice guidelines on the official Ansible documentation page: Ansible Lint Rules. Your insights and suggestions would be greatly appreciated!Example playbook is:"
+
+---
+- name: Test Connection Playbook
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Display current user
+      ansible.builtin.command: "whoami"
+      register: my_output # <- Registers the command output.
+      changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.
+    - name: Copy hosts file to remote hosts
+      ansible.builtin.copy:
+        src: "{{ dir }}/hosts"
+        dest: /etc/hosts
+        mode: "0644"
+        backup: true
+        force: true
+      become: true
+
+Remember this prompt for this chat and provide answers based on this.

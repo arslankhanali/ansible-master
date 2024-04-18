@@ -26,7 +26,7 @@ localhost ansible_host=127.0.0.1
 > `variable.yaml` and `variable.yml` is not the same
 
 ##############################################################################
-# Ansible lint keeps on showing errors
+# Ansible files keeps on showing errors
 > CLose all editors in VS code
 
 ##############################################################################

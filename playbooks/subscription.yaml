@@ -3,7 +3,7 @@
   hosts: all
   become: true
   vars_files:
-    - ../vars_subscription.yaml
+    - ../host_vars/subscription_vars.yaml
   tasks:
     - name: Registering machine and attaching 'Employee SKU'
       community.general.redhat_subscription:

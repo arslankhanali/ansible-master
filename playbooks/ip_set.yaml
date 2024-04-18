@@ -6,16 +6,16 @@
   tasks:
     - name: Converting DHCP IP to a Static IP
       ansible.builtin.debug:
-        msg: "Setting {{ ansible_default_ipv4.alias }} static IP to {{ ansible_default_ipv4.address }}"
+        msg: "New Static IP: {{ ip_address | default(ansible_default_ipv4.address) }} | Old IP: {{ ansible_default_ipv4.address }}"
 
     - name: Add an Ethernet connection with static IP configuration
       community.general.nmcli:
-        conn_name: "{{ ansible_default_ipv4.alias }}"
-        ifname: "{{ ansible_default_ipv4.interface }}"
+        conn_name: "{{ conn_name | default(ansible_default_ipv4.alias) }}"
+        ifname: "{{ ifname | default(ansible_default_ipv4.interface) }}"
         type: ethernet
-        ip4: "{{ ansible_default_ipv4.address }}"
-        gw4: "{{ ansible_default_ipv4.gateway }}"
-        dns4: "{{ ansible_dns.nameservers }}"
+        ip4: "{{ ip_address | default(ansible_default_ipv4.address) }}"
+        gw4: "{{ gw_address | default(ansible_default_ipv4.gateway) }}"
+        dns4: "{{ dns_servers | default(ansible_dns.nameservers) }}"
         state: present
 
     - name: Bring up network connection using nmcli

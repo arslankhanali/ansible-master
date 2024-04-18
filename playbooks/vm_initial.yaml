@@ -1,0 +1,5 @@
+---
+- name: Sudo
+  ansible.builtin.import_playbook: sudoer.yaml
+- name: Copy ssh-copy-id
+  ansible.builtin.import_playbook: ssh-copy-id.yaml

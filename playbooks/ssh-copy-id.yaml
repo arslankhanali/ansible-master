@@ -1,0 +1,11 @@
+---
+- name: Copy SSH public key to remote host
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Add SSH public key to authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', ssh_publickey_path | default('~/.ssh/id_rsa.pub')) }}"
+        state: present

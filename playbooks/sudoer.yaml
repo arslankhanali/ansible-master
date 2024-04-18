@@ -1,0 +1,28 @@
+---
+- name: Create sudoers file for user {{ ansible_user }}
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Switch to root and create sudoers file
+      ansible.builtin.expect:
+        command: "su root -c 'touch /etc/sudoers.d/{{ ansible_user }}'"
+        responses:
+          Password: "{{ ansible_become_pass }}"
+      register: result1
+      ignore_errors: true
+
+    - name: Print command output for creating sudoers file
+      ansible.builtin.debug:
+        var: result1.stdout_lines
+
+    - name: Switch to root and edit /etc/sudoers.d/{{ ansible_user }}
+      ansible.builtin.expect:
+        command: "su root -c \"echo '%{{ ansible_user }} ALL=(ALL) NOPASSWD: ALL' | sudo tee -a /etc/sudoers.d/{{ ansible_user }}\""
+        responses:
+          Password: "{{ ansible_become_pass }}"
+      register: result2
+      ignore_errors: true
+
+    - name: Print command output for appending sudoers configuration
+      ansible.builtin.debug:
+        var: result2.stdout_lines

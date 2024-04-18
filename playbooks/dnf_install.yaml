@@ -1,16 +1,9 @@
 ---
 - name: Dnf install
   hosts: all
-  vars_files:
-    - ../variables.yaml
   tasks:
     - name: Install packages
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
       loop: "{{ packages_to_install }}"
-
-# $ cat ../variables.yaml
-# packages_to_install:
-#   - wget
-#   - git

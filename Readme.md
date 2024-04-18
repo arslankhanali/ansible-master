@@ -1,3 +1,7 @@
+# Important links
+1. [ansible.cfg option](https://docs.ansible.com/ansible/2.9/reference_appendices/config.html#common-options)
+2. [inventory option](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters)
+
 # Install 
 ``` sh
 # On RHEL
@@ -13,9 +17,9 @@ brew install ansible
 ssh-keygen -t rsa -b 4096
 
 # Copy your public key to host
-ssh-copy-id -o StrictHostKeyChecking=no -i /Users/arslankhan/.ssh/id_rsa rc@<ip_address>
+ssh-copy-id -o StrictHostKeyChecking=no <user>@<ip_address>
 # or
-ansible-playbook -l node1 playbooks/ssh_copy_publickey.yaml -e ssh_key_path="/Users/arslankhan/.ssh/id_rsa.pub" -e remote_user="rc"
+ansible-playbook -l node1 playbooks/ssh-copy-id.yaml -e ssh_publickey_path="~/.ssh/id_rsa.pub"
 ```
 # Run ansible
 ansible is for adhoc commands
@@ -36,22 +40,23 @@ ansible node1 -m ansible.builtin.setup  >> node1_facts.json
 ```
 # Run ansible-playbook
 ``` sh
-# Check Syntax of playbook. --syntax-check
+# Check Syntax of all playbook in this repo
+aplaybook playbooks/* --syntax-check      
 ansible-playbook playbooks/index.html.j2 --syntax-check # Should give error
 
 # See what hosts will be targetted. --list-hosts
 ansible-playbook -l g123 playbooks/helloworld.yaml --list-hosts
 
 # Run helloworld playbook.
-# Select inventory file with -i 
-# Select subset of hosts with -l. 
+# -u rc
+# -c ssh|local
+# -e variables.yaml
+# -i inventory1
+# -l subset 
 ansible-playbook -i inventory -l all playbooks/helloworld.yaml
 ansible-playbook -l all   playbooks/helloworld.yaml # Run on all
 ansible-playbook -l g1    playbooks/helloworld.yaml # Run on a group of node
 ansible-playbook -l node1 playbooks/helloworld.yaml # Run on a single node
-
-# Specify ansible user. -u
-ansible-playbook -l node1 playbooks/gatherFacts.yaml -u rc
 
 # --step , step through each task 1 by 1
 ansible-playbook -l node1 playbooks/helloworld.yaml --step
@@ -65,7 +70,7 @@ When adding a new host to inventory. Its a good idea to put all its variables in
 
 In Ansible, when dealing with variable precedence, the order of precedence from highest to lowest is as follows:
 1. **Variables defined in the playbook**: These variables are defined within the playbook itself using `vars` or `vars_files` directives.
-2. **Variables defined in inventory**: Variables defined within the inventory file or in inventory group_vars or host_vars directories.
+2. **Variables defined in inventory**: Variables defined within the inventory file or in inventory `group_vars` or `host_vars` directories.
 3. **Variables defined in roles**: Variables defined within roles, either in `defaults/main.yml`, `vars/main.yml`, or using `vars_files`.
 4. **Variables defined in the playbook directory**: Variables defined in `host_vars` takes precedance over `group_vars` within the playbook directory.
 5. **Variables defined in the `ansible.cfg` file**: These are global variables set in the `ansible.cfg` configuration file.
@@ -146,9 +151,6 @@ inventory = ./inventory
 remote_user = rc
 private_key_file = ./keys/id_rsa
 ansible_ssh_common_args = -o ControlMaster=auto -o ControlPersist=60s -o 
-gather_facts = false
-StrictHostKeyChecking=no
-become_password = YourBecomePassword
 EOF
 ```
 
@@ -185,12 +187,3 @@ Runs Ansible playbooks, executing the defined tasks on the targeted hosts.
 positional arguments:
   playbook              Playbook(s)
 ```
-
-# Notes
-1. Ansible gathers facts by default unless you explicitly disable it. 
-   1. `gather_facts: no   # Disable fact gathering`
-2. Realtime output 
-```sh 
-
-```
-3. 

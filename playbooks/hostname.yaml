@@ -4,7 +4,6 @@
   become: true
   vars_files:
     - ../vars_subscription.yaml
-    - ../variables.yaml
   tasks:
     - name: Change hostname
       ansible.builtin.hostname:

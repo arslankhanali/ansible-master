@@ -1,5 +1,4 @@
 ---
-# ansible-playbook -l node1 playbooks/motd_4display.yaml
 - name: Display message of the day (motd)
   hosts: all
   become: true

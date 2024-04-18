@@ -1,5 +1,10 @@
+---
 - name: Change prompt color in bashrc
   hosts: all
+  vars_prompt:
+    - name: color
+      prompt: "Enter a color (30: Black, 31: Red, 32: Green, 33: Yellow, 34: Blue, 35: Magenta, 36: Cyan, 37: White)"
+      private: false
   tasks:
     - name: Change prompt color in bashrc
       ansible.builtin.lineinfile:
