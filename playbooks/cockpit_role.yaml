@@ -1,0 +1,22 @@
+---
+- name: Manage cockpit
+  hosts: all
+  become: true
+  roles:
+    - fedora.linux_system_roles.cockpit
+  tasks:
+    - name: Install RHEL/Fedora Web Console (Cockpit)
+      ansible.builtin.include_role:
+        name: fedora.linux_system_roles.cockpit
+      vars:
+        cockpit_packages: default
+        # cockpit_packages: minimal
+        # cockpit_packages: full
+
+    - name: Configure Firewall for Web Console
+      ansible.builtin.include_role:
+        name: fedora.linux_system_roles.firewall
+      vars:
+        firewall:
+          service: cockpit
+          state: enabled

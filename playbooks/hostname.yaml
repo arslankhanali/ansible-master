@@ -2,9 +2,8 @@
 - name: Change hostname
   hosts: all
   become: true
-  vars_files:
-    - ../vars_subscription.yaml
   tasks:
     - name: Change hostname
       ansible.builtin.hostname:
         name: "{{ hostname }}"
+      when: hostname is defined

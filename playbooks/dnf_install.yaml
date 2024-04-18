@@ -6,4 +6,4 @@
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-      loop: "{{ packages_to_install }}"
+      loop: "{{ packages_to_install | default([]) }}"

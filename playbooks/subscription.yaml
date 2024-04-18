@@ -5,9 +5,20 @@
   vars_files:
     - ../host_vars/subscription_vars.yaml
   tasks:
+    - name: Check if machine is registered
+      ansible.builtin.command: subscription-manager identity
+      ignore_errors: true
+      register: registration_output
+      changed_when: registration_output.rc != 0 # <- Uses the return code to define when the task has changed.
+
     - name: Registering machine and attaching 'Employee SKU'
       community.general.redhat_subscription:
         state: present
         username: "{{ rh_username }}"
         password: "{{ rh_password }}"
         pool_ids: "{{ subscription_pool_id }}"
+      when:
+        - rh_username is defined
+        - rh_password is defined
+        - subscription_pool_id is defined
+        - registration_output.rc != 0

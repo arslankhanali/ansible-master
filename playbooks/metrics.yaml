@@ -1,0 +1,16 @@
+---
+- name: Manage centralized metrics gathering
+  hosts: all
+  become: true
+  vars:
+    # metrics_monitored_hosts: [app.example.com, db.example.com, nas.example.com]
+    metrics_graph_service: true
+    metrics_query_service: true
+    metrics_manage_firewall: true
+    metrics_manage_selinux: true
+  roles:
+    - fedora.linux_system_roles.metrics
+  tasks:
+    - name: Print message indicating Grafana availability
+      ansible.builtin.debug:
+        msg: "Grafana will be available at port 3000. Credentials: admin/admin"
