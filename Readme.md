@@ -14,9 +14,15 @@ ssh-keygen -t rsa -b 4096
 
 # Copy your public key to host
 ssh-copy-id -o StrictHostKeyChecking=no <user>@<ip_address>
-# or
-ansible-playbook -l node1 playbooks/ssh-copy-id.yaml -e ssh_publickey_path="~/.ssh/id_rsa.pub"
 ```
+
+# Important links
+1. [ansible.cfg option](https://docs.ansible.com/ansible/2.9/reference_appendices/config.html#common-options)
+2. [inventory option](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters)
+3. [playbook keywords](https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html)
+4. [all modules](https://docs.ansible.com/ansible/latest/collections/index_module.html)
+5. [fedora systemroles](https://galaxy.ansible.com/ui/repo/published/fedora/linux_system_roles/content/)
+
 # Run ansible
 ansible is for adhoc commands
 ``` sh
@@ -44,15 +50,9 @@ ansible-playbook playbooks/index.html.j2 --syntax-check # Should give error
 ansible-playbook -l g123 playbooks/helloworld.yaml --list-hosts
 
 # Run helloworld playbook.
-# -u rc
-# -c ssh|local
-# -e variables.yaml
-# -i inventory1
-# -l subset 
+# -u rc -c ssh|local -e variables.yaml -i inventory1 -l subset 
 ansible-playbook -i inventory -l all playbooks/helloworld.yaml
 ansible-playbook -l all   playbooks/helloworld.yaml # Run on all
-ansible-playbook -l g1    playbooks/helloworld.yaml # Run on a group of node
-ansible-playbook -l node1 playbooks/helloworld.yaml # Run on a single node
 
 # --step , step through each task 1 by 1
 ansible-playbook -l node1 playbooks/helloworld.yaml --step
@@ -60,6 +60,25 @@ ansible-playbook -l node1 playbooks/helloworld.yaml --step
 # Playbook to gather facts
 ansible-playbook -l node1 playbooks/gatherFacts.yaml 
 ```
+
+# Imp files
+1. inventory
+2. on mac
+   1. /etc/hosts
+   2. /Users/arslankhan/.ssh/config
+3. ansible.cfg
+4. variable file
+   1. good to put it in `host_vars` folder
+
+# Notes
+1. **Gather facts:** is implicit by default i.e. true
+2. **Quotes**: Put `single quotes` inside `double quotes`. `"''"`
+   1. Escape single quotes that are used as plain texts not to segment
+   2. `"command='su root -c \'touch /etc/sudoers.d/rc\'' responses=Password=billu"`
+   3. Essitially put escape character `\` with evertthing except first `"` before command and first `'` before sudo. No escape ch when these `" and '` close as well.
+3. **Command vs Shell**: Careful about characters with `command` module. Some cannot be processed through the shell, so variables like `$HOME` and operations like `"<", ">", "|", and "&" `will not work.
+   1. In such cases use `shell` module
+   2. command is safer and preferred over shell
 
 # Variables
 When adding a new host to inventory. Its a good idea to put all its variables in `host_vars/<hostname>.yaml` file  
@@ -75,15 +94,9 @@ In Ansible, when dealing with variable precedence, the order of precedence from 
 # CHECK Which variables a host is picking up or prioritising
 ansible-inventory --host node1
 
-# We are setting 'welcome_message' variable in motd playbooks
-# -e 
-ansible-playbook -l node1 playbooks/motd_1set.yaml # `welcome_message`defined in playbook - Savy
-ansible-playbook -l node1 playbooks/motd_2add.yaml # Variable file defined inside playbook. File is `variables.yaml` in this repo
-ansible-playbook -l node1 playbooks/motd_3replace.yaml # Will pick `welcome_message` from `host_vars/node1.yaml` file
-ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml # Give variables from a file
-ansible-playbook -l node1 playbooks/motd_3replace.yaml -e "welcome_message='FROM CLI : Savvy!'" # Give variable value in CLI
-ansible-playbook -l node1 playbooks/motd_3replace.yaml  -e @variables.yaml -e "welcome_message='FROM CLI - Defined Later : Savvy!'"  # If same variable is defined at two places and given to the playbook. The one defined later is given preference. `-e welcome_message="defined_later" in this case.
-ansible-playbook -l node1 playbooks/motd_5delete.yaml
+ansible-playbook -l node1 playbooks/motd_set.yaml  -e @variables.yaml # Give variables from a file
+ansible-playbook -l node1 playbooks/motd_set.yaml -e "motd='FROM CLI : Savvy!'" # Give variable value in CLI
+ansible-playbook -l node1 playbooks/motd_set.yaml -e @variables.yaml -e "welcome_message='FROM CLI - Defined'" # Later will be used
 ```
 
 # Mac
@@ -100,7 +113,7 @@ ansible-playbook -l localhost playbooks/mac.yaml --connection=local --ask-become
 ``` sh
 # list 
 ansible-inventory --inventory inventory --list # All details in yaml format
-ansible-inventory -i inventory_remote --list
+ansible-inventory --list
 ansible-inventory --graph                      # All hosts and groups
 ansible-inventory --graph --vars               # What variables is each host picking up
 
@@ -113,21 +126,6 @@ ansible-inventory --host node1
 # You can run anisble playbooks on any host as long as you can SSH into that machine
 # Install sshpass on mac
 brew install sshpass
-
-# Create a password file 
-cat <<EOF > password_any_name.yaml
-ansible_password: <your_ssh_password>
-EOF
-
-# Add to inventory_remote file. You can give any name to inventory file and reference in CLI
-
-cat <<EOF >> inventory_remote
-ceph ansible_host=ssh.ocpvdev01.dal10.infra.demo.redhat.com ansible_port=30087 ansible_user=lab-user ansible_password=@password_ceph.yml
-EOF
-
-# Run playbooks on remote server. Use group name or the hostname we set
-ansible-playbook -i inventory_remote -l ceph playbooks/motd_1set.yaml 
-
 ```
 
 # ansible.cfg
@@ -150,36 +148,23 @@ ansible_ssh_common_args = -o ControlMaster=auto -o ControlPersist=60s -o
 EOF
 ```
 
+# Roles
+```sh
+# Install Fedora system roles
+ansible-galaxy collection install fedora.linux_system_roles
+```
 
-# Help 
+# Using Vaults
 ``` sh
-# (.venv) arslankhan ansible-master % ansible -h
-usage: ansible [-h] [--version] [-v] [-b] [--become-method BECOME_METHOD] [--become-user BECOME_USER]
-               [-K | --become-password-file BECOME_PASSWORD_FILE] [-i INVENTORY] [--list-hosts] [-l SUBSET] [-P POLL_INTERVAL] [-B SECONDS]
-               [-o] [-t TREE] [--private-key PRIVATE_KEY_FILE] [-u REMOTE_USER] [-c CONNECTION] [-T TIMEOUT]
-               [--ssh-common-args SSH_COMMON_ARGS] [--sftp-extra-args SFTP_EXTRA_ARGS] [--scp-extra-args SCP_EXTRA_ARGS]
-               [--ssh-extra-args SSH_EXTRA_ARGS] [-k | --connection-password-file CONNECTION_PASSWORD_FILE] [-C] [-D] [-e EXTRA_VARS]
-               [--vault-id VAULT_IDS] [-J | --vault-password-file VAULT_PASSWORD_FILES] [-f FORKS] [-M MODULE_PATH]
-               [--playbook-dir BASEDIR] [--task-timeout TASK_TIMEOUT] [-a MODULE_ARGS] [-m MODULE_NAME]
-               pattern
+# New file
+ansible-vault create passwords.yaml
 
-Define and run a single task 'playbook' against a set of hosts
+# if password file is encrypted & you are happy to be prompted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
 
-positional arguments:
-  pattern               host pattern
+# if password file is encrypted & DO NOT want to be prompted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --vault-password-file secrets/password-vault
 
-# (.venv) arslankhan ansible-master % ansible-playbook -h
-usage: ansible-playbook [-h] [--version] [-v] [--private-key PRIVATE_KEY_FILE] [-u REMOTE_USER] [-c CONNECTION] [-T TIMEOUT]
-                        [--ssh-common-args SSH_COMMON_ARGS] [--sftp-extra-args SFTP_EXTRA_ARGS] [--scp-extra-args SCP_EXTRA_ARGS]
-                        [--ssh-extra-args SSH_EXTRA_ARGS] [-k | --connection-password-file CONNECTION_PASSWORD_FILE] [--force-handlers]
-                        [--flush-cache] [-b] [--become-method BECOME_METHOD] [--become-user BECOME_USER]
-                        [-K | --become-password-file BECOME_PASSWORD_FILE] [-t TAGS] [--skip-tags SKIP_TAGS] [-C] [-D] [-i INVENTORY]
-                        [--list-hosts] [-l SUBSET] [-e EXTRA_VARS] [--vault-id VAULT_IDS] [-J | --vault-password-file VAULT_PASSWORD_FILES]
-                        [-f FORKS] [-M MODULE_PATH] [--syntax-check] [--list-tasks] [--list-tags] [--step] [--start-at-task START_AT_TASK]
-                        playbook [playbook ...]
-
-Runs Ansible playbooks, executing the defined tasks on the targeted hosts.
-
-positional arguments:
-  playbook              Playbook(s)
+# if password file is NOT encrypted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-plaintext.yaml
 ```

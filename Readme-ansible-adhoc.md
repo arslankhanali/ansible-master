@@ -15,18 +15,11 @@ ansible node1 \
 
 ### su root - using `expect` module
 > Useful when SSH login for root user is disabled and the current user is not in sudo list
-
-ansible node1 \
-  --u rc\
-  --ask-pass \
-  --module-name expect \
-  --args "command='su root -c \'echo \'%rc ALL=(ALL) NOPASSWD: ALL\' | sudo tee -a /etc/sudoers.d/rc\'' responses=Password=fox"  
-  `--args "command='su root -c \'echo \'%rc ALL=(ALL) NOPASSWD: ALL\' | sudo tee -a /etc/sudoers.d/rc\'' responses=Password=fox"`
-
 1. Replace `fox` with password
 2. responses format is: `responses=<regex of prompt>=<what to reply with>`. Since it is a regex is midlle, `Password, assword, P , : , word` will all work since it matches the regex of prompt i.e. `Password: `. ![alt text](images/pass.png)
 3. For quotes, put escape character `\` with everything except first `"` before `command` and first `'` before `sudo`. No escape character when these close as well.
 4. test
+
 ``` sh
 # Should remain rc user
 ansible node1 \
@@ -42,6 +35,12 @@ ansible node1 \
   --module-name expect \
   --args "command='su root -c whoami' responses=word=fox timeout=1"  
 ```
+ansible node1 \
+  --u rc\
+  --ask-pass \
+  --module-name expect \
+  --args "command='su root -c \'echo \'%rc ALL=(ALL) NOPASSWD: ALL\' | sudo tee -a /etc/sudoers.d/rc\'' responses=Password=fox"  
+  `--args "command='su root -c \'echo \'%rc ALL=(ALL) NOPASSWD: ALL\' | sudo tee -a /etc/sudoers.d/rc\'' responses=Password=fox"`
 
 ### Make current user a sudo user
 ```sh
@@ -65,7 +64,6 @@ ansible node1 \
 ansible all -m lineinfile -a "dest=/etc/ssh/sshd_config line='PermitRootLogin yes' state=present" -b # type yes
 ansible all -m service -a "name=sshd state=restarted" -b
 ```
-
 
 ### Use IP instead of Hostname. No need to specify inventory first
 Instead of `-l hostname` you can use `-i 172.16.79.145,`

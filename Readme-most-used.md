@@ -38,23 +38,3 @@ ansible-playbook -l node9 playbooks/ping.yaml -e @passwords/passwords-encrypted.
 # if password file is NOT encrypted
 ansible-playbook -l node9 playbooks/ping.yaml -e @passwords/passwords-plaintext.yaml
 ```
-# Roles
-```sh
-# Install Fedora system roles
-ansible-galaxy collection install fedora.linux_system_roles
-```
-
-# Using Vaults
-``` sh
-# New file
-ansible-vault create passwords.yaml
-
-# if password file is encrypted & you are happy to be prompted
-ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
-
-# if password file is encrypted & DO NOT want to be prompted
-ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --vault-password-file secrets/password-vault
-
-# if password file is NOT encrypted
-ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-plaintext.yaml
-```
