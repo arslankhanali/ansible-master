@@ -9,7 +9,7 @@
         # responses expected question: reply. For below it means if it asks for Password: then replay with "{{ ansible_become_pass }}"
         responses:
           Password: "{{ ansible_become_pass }}"
-        timeout: 1
+        timeout: 3
       register: result1
       ignore_errors: true
 
@@ -22,7 +22,7 @@
         command: "su root -c \"echo '%{{ ansible_user }} ALL=(ALL) NOPASSWD: ALL' | sudo tee -a /etc/sudoers.d/{{ ansible_user }}\""
         responses:
           Password: "{{ ansible_become_pass }}"
-        timeout: 1
+        timeout: 3
       register: result2
       ignore_errors: true
 

@@ -10,13 +10,13 @@ vim host_vars/node.yaml
 node ansible_host=192.168.1.1
 
 # put passwords in secrets/passwords-<node> file
-cat > secrets/passwords-node << EOF
+cat > secrets/passwords-encrypted.yaml << EOF
 ansible_password: SUPERDOOPER
 ansible_become_pass: SUPERDOOPER
 EOF
 
 # encrypt password file
-ansible-vault encrypt secrets/passwords-node
+ansible-vault encrypt secrets/passwords-encrypted.yaml
 ```
 # Change files on mac
 I have softlinks for imp files in the `softlinks` folder

@@ -1,3 +1,3 @@
 hostname: "node2"
-color: "33"
-welcome_message: "Welcome to {{ hostname }}"
+color: "31"
+motd: "Welcome to {{ hostname }}"

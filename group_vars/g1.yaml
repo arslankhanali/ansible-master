@@ -1,1 +1,1 @@
-welcome_message: "FROM group_vars/g1.yaml : Savvy!"
+motd: "FROM group_vars/g1.yaml : Savvy!"

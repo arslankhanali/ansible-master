@@ -8,16 +8,16 @@ node6 ansible_host=172.16.79.152
 fedora1 ansible_host=172.16.79.157
 
 [localhost]
-mac ansible_host=127.0.0.1 ansible_connection=local
+mac ansible_host=127.0.0.1 ansible_user=arslankhan ansible_connection=local
 
 [nodes:vars]
 ansible_user=rc
-ansible_ssh_private_key_file= ~/.ssh/id_rsa
 ansible_ssh_common_args = -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPersist=60s
-# Get below values from password files. They can also be here, but thats bad practice
-# Its only needed for the first time anyways, since we will copy ssh-copy-id later.
-ansible_password=fox
-ansible_become_pass=fox
+; ansible_ssh_private_key_file= ~/.ssh/id_rsa
+# Get below values from password files. They can also be here, but that is a bad practice
+# Its only needed for the first time anyways, since we will copy ssh-copy-id later to enable passwordless logins.
+# ansible_password=fox
+# ansible_become_pass=fox
 
 [remote]
 ceph ansible_host=ocpvdev01.dal10.infra ansible_port=30087 ansible_user=lab-user ansible_password=@password_ceph.yaml

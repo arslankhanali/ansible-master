@@ -1,4 +1,5 @@
 ---
+# tooks 16m 3s on local VMs
 - name: Upgrade all packages
   hosts: all
   become: true
@@ -7,3 +8,4 @@
       ansible.builtin.dnf:
         name: "*"
         state: latest
+        # exclude: kernel*, glibc*, linux-firmware*, systemd*, dbus*, udev*

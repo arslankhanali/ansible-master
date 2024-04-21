@@ -1,4 +1,17 @@
 ---
+#####################
+# Available Variables
+#####################
+# hostname: "node1"
+# color: 33
+# packages_to_install:
+#   - cockpit
+#   - vim
+# motd: "Savvy!"
+# ssh_publickey_path: "~/.ssh/id_rsa.pub"
+# ip_address: "172.16.79.145"
+# gw_address: "172.16.79.2"
+# dns_servers: "8.8.8.8"
 - name: Sudo
   ansible.builtin.import_playbook: sudoer.yaml
 - name: Copy ssh-copy-id

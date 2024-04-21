@@ -1,4 +1,5 @@
 ---
+# sudo cat /etc/NetworkManager/system-connections/ens160.nmconnection
 - name: Converting DHCP IP to a Static IP
   hosts: all
   become: true

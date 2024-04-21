@@ -1,1 +1,3 @@
 hostname: "fedora1"
+color: "35"
+motd: "Welcome to {{ hostname }}"

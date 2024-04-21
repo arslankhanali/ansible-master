@@ -1,12 +1,12 @@
 # Quick VM setup for ansible
+Use `-i 172.16.79.145,` if you dont want to first configure inventory file. Catch is that playbook should have `hosts: all` in it
 ``` sh
-# node1 
+# Any new host
 ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial.yaml --ask-pass -u rc -e ansible_become_pass=fox -i 172.16.79.145,
-ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_rhel.yaml -l node1 -e hostname=node1
-
-# Fedora
-ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial.yaml --ask-pass -u rc -e ansible_become_pass=fox -i 172.16.79.157,
-ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_fedora.yaml -l fedora1 -e hostname=fedora1 -e "packages_to_install=['cockpit','vim']"
+# node1 
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_rhel.yaml --ask-pass -u rc -e ansible_become_pass=fox  -e hostname=node1 -i 172.16.79.145,          
+# fedora1
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_fedora.yaml --ask-pass -u rc -e ansible_become_pass=fox -e "packages_to_install=['cockpit','vim']" -i 172.16.79.157,               
 ```
 
 # Most used 

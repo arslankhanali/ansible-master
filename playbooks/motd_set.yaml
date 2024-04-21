@@ -6,5 +6,5 @@
     - name: Set up welcome message
       ansible.builtin.lineinfile:
         path: /etc/motd
-        line: "{{ welcome_message | default('Savvy!') }}"
+        line: "{{ motd | default('Savvy!') }}"
         state: present
