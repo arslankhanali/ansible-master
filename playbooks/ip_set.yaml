@@ -15,7 +15,7 @@
         type: ethernet
         ip4: "{{ ip_address | default(ansible_default_ipv4.address) }}"
         gw4: "{{ gw_address | default(ansible_default_ipv4.gateway) }}"
-        dns4: "{{ dns_servers | default(ansible_dns.nameservers) }}"
+        dns4: "{{ dns_servers | default('8.8.8.8,1.1.1.1') }}"
         state: present
 
     - name: Bring up network connection using nmcli

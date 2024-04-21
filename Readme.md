@@ -1,10 +1,3 @@
-# Important links
-1. [ansible.cfg option](https://docs.ansible.com/ansible/2.9/reference_appendices/config.html#common-options)
-2. [inventory option](https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters)
-3. [all modules](https://docs.ansible.com/ansible/latest/collections/index_module.html)
-4. [playbook keywords](https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html)
-5. [fedora systemroles](https://galaxy.ansible.com/ui/repo/published/fedora/linux_system_roles/content/)
-
 # Install 
 ``` sh
 # On RHEL

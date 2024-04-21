@@ -1,9 +1,10 @@
----
-- name: Get current network configuration for interface ens160
+- name: Get network configuration for all interfaces that are up
   hosts: all
   become: true
+  gather_facts: true
   tasks:
-    - name: Display network configuration for interface ens160
+    - name: Display network configuration
       ansible.builtin.debug:
-        msg: "Interface ens160 configuration - Address: {{ ansible_ens160 }}"
-      when: ansible_ens160 is defined
+        msg: |
+          **Network Info**: {{ ansible_default_ipv4 }}
+          **DNS Servers**: {{ ansible_dns.nameservers | join(', ') }}

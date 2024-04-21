@@ -1,12 +1,23 @@
+# Quick VM setup for ansible
+``` sh
+# node1 
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial.yaml --ask-pass -u rc -e ansible_become_pass=fox -i 172.16.79.145,
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_rhel.yaml -l node1 -e hostname=node1
+
+# Fedora
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial.yaml --ask-pass -u rc -e ansible_become_pass=fox -i 172.16.79.157,
+ansible-playbook ~/Codes/ansible-master/playbooks/vm_initial_fedora.yaml -l fedora1 -e hostname=fedora1 -e "packages_to_install=['cockpit','vim']"
+```
+
 # Most used 
 ``` sh
 # syntax-check 
 ansible-playbook playbooks/* --syntax-check 
 
-# target hosts
+# target hosts for this playbook
 ansible-playbook -l node9 playbooks/helloworld.yaml --list-hosts
 
-# list host/group
+# list all host/group
 ansible --list-hosts nodes
 
 # list variables for host/group
@@ -26,4 +37,24 @@ ansible-playbook -l node9 playbooks/ping.yaml -e @passwords/passwords-encrypted.
 ansible-playbook -l node9 playbooks/ping.yaml -e @passwords/passwords-encrypted.yaml --vault-password-file passwords/password-vault
 # if password file is NOT encrypted
 ansible-playbook -l node9 playbooks/ping.yaml -e @passwords/passwords-plaintext.yaml
+```
+# Roles
+```sh
+# Install Fedora system roles
+ansible-galaxy collection install fedora.linux_system_roles
+```
+
+# Using Vaults
+``` sh
+# New file
+ansible-vault create passwords.yaml
+
+# if password file is encrypted & you are happy to be prompted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
+
+# if password file is encrypted & DO NOT want to be prompted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --vault-password-file secrets/password-vault
+
+# if password file is NOT encrypted
+ansible-playbook -l node9 playbooks/ping.yaml -e @secrets/passwords-plaintext.yaml
 ```

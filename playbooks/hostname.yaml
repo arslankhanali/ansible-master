@@ -5,5 +5,5 @@
   tasks:
     - name: Change hostname
       ansible.builtin.hostname:
-        name: "{{ hostname }}"
+        name: "{{ hostname | default(hostname) }}"
       when: hostname is defined

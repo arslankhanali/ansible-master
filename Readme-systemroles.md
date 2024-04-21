@@ -1,1 +1,0 @@
-ansible-galaxy collection install fedora.linux_system_roles

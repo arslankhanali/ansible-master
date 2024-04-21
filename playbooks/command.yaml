@@ -8,3 +8,10 @@
       ansible.builtin.command: "whoami"
       register: my_output # <- Registers the command output.
       changed_when: my_output.rc != 0 # <- Uses the return code to define when the task has changed.
+    - name: Output
+      ansible.builtin.debug:
+        msg: "Cmd output: {{ my_output }}"
+      when: my_output.rc != 1
+# "msg": "Cmd output: {'changed': False, 'stdout': 'rc', 'stderr': '', 'rc': 0, 'cmd': ['whoami'], 'start': '2024-04-21 18:48:27.396980', \
+# 'end': '2024-04-21 18:48:27.403205', 'delta': '0:00:00.006225', 'msg': '', 'stdout_lines': ['rc'], 'stderr_lines': [], \
+# 'ansible_facts': {'discovered_interpreter_python': '/usr/bin/python3'}, 'failed': False}"

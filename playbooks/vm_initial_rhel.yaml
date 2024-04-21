@@ -1,0 +1,21 @@
+---
+- name: Sudo
+  ansible.builtin.import_playbook: sudoer.yaml
+- name: Copy ssh-copy-id
+  ansible.builtin.import_playbook: ssh-copy-id.yaml
+- name: IP
+  ansible.builtin.import_playbook: ip_set.yaml
+- name: Subscribe
+  ansible.builtin.import_playbook: subscription.yaml
+- name: DNF
+  ansible.builtin.import_playbook: dnf_install.yaml
+- name: Hostname
+  ansible.builtin.import_playbook: hostname.yaml
+- name: Set prompt color
+  ansible.builtin.import_playbook: colorprompt.yaml
+- name: Cockpit
+  ansible.builtin.import_playbook: cockpit.yaml
+- name: MOTD
+  ansible.builtin.import_playbook: motd_set.yaml
+# - name: DNF Upgrade
+#   ansible.builtin.import_playbook: dnf_upgradeall.yaml

@@ -1,6 +1,7 @@
 ---
 - name: Dnf install
   hosts: all
+  become: true
   tasks:
     - name: Install packages
       ansible.builtin.dnf:

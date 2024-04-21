@@ -2,12 +2,12 @@
 
 # Get files in order
 ```sh
-# Create and edit host var file. Required value is hostname
+# Create and edit host var file.
 cp host_vars/vm_rhel_template.yaml host_vars/node.yaml  
 vim host_vars/node.yaml  
 
 # Create entry to inventory file
-node ansible_host=172.16.79.156
+node ansible_host=192.168.1.1
 
 # put passwords in secrets/passwords-<node> file
 cat > secrets/passwords-node << EOF
@@ -36,7 +36,7 @@ Update these files so
 ansible-inventory --host node  
 
 # Check if connection is successful
-ansible-playbook -l node playbooks/vm_initial.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
+ansible-playbook -l node playbooks/ping.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
 
 # Run
 ansible-playbook -l node playbooks/vm_initial.yaml -e @secrets/passwords-encrypted.yaml --ask-vault-pass
