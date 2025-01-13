@@ -1,0 +1,99 @@
+---
+# README for Squid Proxy Installation and Configuration Playbook
+# =============================================================================
+#
+# Usage:
+# Run the playbook with the following command:
+#   ansible-playbook ~/Codes/ansible-master/playbooks/squid_proxy.yaml \
+#     -i 172.25.252.1, \
+#     --private-key=~/.ssh/rht_classroom.rsa \
+#     -u student \
+#     --ssh-common-args="-o ProxyJump=cloud-user@148.62.92.65:22022 -p 53009" \
+#     --extra-vars "squid_localnet=172.25.252.1/24"
+#
+# Post-deployment:
+# After running the playbook, SSH into the host using the following command:
+#   ssh -i ~/.ssh/rht_classroom.rsa -J cloud-user@148.62.92.65:22022 \
+#       -L 3128:localhost:3128 \
+#       student@172.25.252.1 -p 53009
+#
+# Then, configure your browser (e.g., Firefox) to use the Squid proxy at:
+#   Proxy Address: localhost
+#   Proxy Port: 3128
+#
+# Troubleshooting:
+# - If you encounter issues, check the status of the Squid service by running:
+#   systemctl status squid
+# =============================================================================
+
+- name: Install and configure Squid proxy
+  hosts: all
+  become: true
+  gather_facts: false  # Disable gathering facts
+  vars:
+    # Default values for squid_localnet and squid_localport in case not provided
+    squid_localnet: "172.25.252.1/24"
+    squid_localport: "22"
+
+  tasks:
+    - name: Install Squid proxy using dnf
+      ansible.builtin.dnf:
+        name: squid
+        state: present
+
+    - name: Add ACL rules to Squid configuration
+      ansible.builtin.blockinfile:
+        path: /etc/squid/squid.conf
+        block: |
+          acl localnet src {{ squid_localnet }}
+          acl Safe_ports port {{ squid_localport }}
+        state: present
+        create: true
+        backup: true
+        mode: "0644"
+
+    - name: Enable Squid service
+      ansible.builtin.service:
+        name: squid
+        enabled: true
+
+    - name: Restart Squid service to apply changes
+      ansible.builtin.service:
+        name: squid
+        state: restarted
+
+- name: Install and configure Squid proxy
+  hosts: all
+  become: true
+  gather_facts: false  # Disable gathering facts
+  vars:
+    # Default values for squid_localnet and squid_localport in case not provided
+    squid_localnet: "172.25.252.1/24"
+    squid_localport: "22"
+
+  tasks:
+    - name: Install Squid proxy using dnf
+      ansible.builtin.dnf:
+        name: squid
+        state: present
+
+    - name: Add ACL rules to Squid configuration
+      ansible.builtin.blockinfile:
+        path: /etc/squid/squid.conf
+        block: |
+          acl localnet src {{ squid_localnet }}
+          acl Safe_ports port {{ squid_localport }}
+        state: present
+        create: true
+        backup: true
+        mode: "0644"
+
+    - name: Enable Squid service
+      ansible.builtin.service:
+        name: squid
+        enabled: true
+
+    - name: Restart Squid service to apply changes
+      ansible.builtin.service:
+        name: squid
+        state: restarted

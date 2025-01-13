@@ -1,0 +1,15 @@
+---
+- name: Instal Vmware tools
+  hosts: all
+  become: true
+  tasks:
+    - name: Install open-vm-tools package
+      ansible.builtin.dnf:
+        name: open-vm-tools
+        state: present
+
+    - name: Enable and start vmtoolsd service
+      ansible.builtin.systemd:
+        name: vmtoolsd
+        enabled: true
+        state: started
