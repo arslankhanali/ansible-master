@@ -12,11 +12,12 @@ syntax problem.  The offending line appears to be:  [all] node2 ansible_host=172
 [WARNING]: Unable to parse /Users/arslankhan/Codes/0-scripts/Ansible/inventory as an inventory source
 [WARNING]: No inventory was parsed, only implicit localhost is available
 ```
-
-> Found both group and host with same name: localhost
+>>>>>>>>>>>> Solution
+> groupname and hostname was same i.e. localhost
 - old
 [localhost]
 localhost ansible_host=127.0.0.1
+
 - new
 [local]
 localhost ansible_host=127.0.0.1
