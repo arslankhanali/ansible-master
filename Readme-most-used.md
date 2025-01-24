@@ -21,16 +21,16 @@ ansible-playbook ~/Codes/ansible-master/playbooks/squid_proxy.yaml -i 172.25.252
 ansible-playbook playbooks/* --syntax-check 
 
 # target hosts for this playbook
-ansible-playbook -l node9 playbooks/helloworld.yaml --list-hosts
+ansible-playbook -l node1 playbooks/helloworld.yaml --list-hosts
 
 # list all host/group
 ansible --list-hosts nodes
 
 # list variables for host/group
-ansible-inventory --host node9  
+ansible-inventory --host node1  
 
 # copy ssh key
-ssh-copy-id -o StrictHostKeyChecking=no username@192.168.1.1
+ssh-copy-id -o StrictHostKeyChecking=no homelab@192.168.1.105
 
 # ansible
 ansible node9 -m command -a hostname

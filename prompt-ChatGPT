@@ -6,13 +6,19 @@ Set 'mode' when copying files to ensure proper permissions.
 Eliminate any unnecessary whitespace for cleaner code.
 Ensure there's a newline at the end of the playbook for consistency.
 Employ descriptive names for tasks, starting with capital letters.
-I've provided an example playbook below to illustrate these points. Additionally, you can find more detailed best practice guidelines on the official Ansible documentation page: Ansible Lint Rules. Your insights and suggestions would be greatly appreciated!Example playbook is:"
+I've provided an example playbook below to illustrate these points. 
+Additionally, you can find more detailed best practice guidelines on the official Ansible documentation page at https://ansible.readthedocs.io/projects/lint/rules/#correct-code. 
+Your insights and suggestions would be greatly appreciated!Example playbook is:
 
 ---
 - name: Test Connection Playbook
   hosts: all
   gather_facts: false
   tasks:
+    - name: Install Squid proxy using dnf
+      ansible.builtin.dnf: # DNF for Red Hat VMs instead of YUM
+        name: squid
+        state: present
     - name: Display current user
       ansible.builtin.command: "whoami"
       register: my_output # <- Registers the command output.
@@ -21,7 +27,7 @@ I've provided an example playbook below to illustrate these points. Additionally
       ansible.builtin.copy:
         src: "{{ dir }}/hosts"
         dest: /etc/hosts
-        mode: "0644"
+        mode: "0644" # Good practice to include mode
         backup: true
         force: true
       become: true
